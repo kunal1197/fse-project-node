@@ -2,11 +2,14 @@
  * @file Implements an Express Node HTTP server.
  */
 import express from 'express';
+import SpotifyController from "./src/controllers/SpotifyController";
 
 const cors = require('cors')
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+SpotifyController.getInstance(app);
 
 
 /**
