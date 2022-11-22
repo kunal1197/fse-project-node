@@ -10,7 +10,7 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
     public static getInstance = (app: Express): SpotifyController => {
         if(SpotifyController.spotifyController === null) {
             SpotifyController.spotifyController = new SpotifyController();
-            app.get("/api/music/search/:query", SpotifyController.spotifyController.searchTracks);
+            app.get("/api/music/search/", SpotifyController.spotifyController.searchTracks);
         }
         return SpotifyController.spotifyController;
     }
@@ -19,7 +19,14 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
 
     }
 
-    searchTracks = (req: Request, res: Response) =>
-        SpotifyController.spotifyService.searchTracks(req.params.query).then(tracks => res.json(tracks))
+    searchTracks = (req: Request, res: Response) => {
+        if (!req.query.q || !req.query.q.toString().length) {
+            res.send([])
+            return
+        }
+        const searchQuery = req.query.q.toString();
+        SpotifyController.spotifyService.searchTracks(searchQuery).then(tracks => res.json(tracks))
+    }
+
 
 }

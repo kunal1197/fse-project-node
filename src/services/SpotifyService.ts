@@ -1,6 +1,8 @@
 import MusicDiscoveryServiceI from "../interfaces/MusicDiscoveryServiceI";
 import SpotifyWebApi from "spotify-web-api-node";
 import Track from "../models/Track";
+const dotenv = require('dotenv');
+dotenv.config();
 
 export default class SpotifyService implements MusicDiscoveryServiceI {
 

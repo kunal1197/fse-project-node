@@ -7,6 +7,7 @@ import SpotifyController from "./src/controllers/SpotifyController";
 const cors = require('cors')
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
 SpotifyController.getInstance(app);
