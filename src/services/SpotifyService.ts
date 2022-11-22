@@ -11,12 +11,9 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
         if (SpotifyService.spotifyService === null) {
             SpotifyService.spotifyService = new SpotifyService();
             SpotifyService.spotifyApi = new SpotifyWebApi({
-                // clientId: process.env.SPOTIFY_CLIENT_ID,
-                // clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-                // redirectUri: process.env.SPOTIFY_REDIRECT_URI
-                clientId: "5c379af252d24d22a2429b8c9c5370ed",
-                clientSecret: "5a444c6c9e0b4029b7815613517379de",
-                redirectUri: "http://www.example.com/callback"
+                clientId: process.env.SPOTIFY_CLIENT_ID,
+                clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+                redirectUri: process.env.SPOTIFY_REDIRECT_URI
             })
             SpotifyService.spotifyApi.clientCredentialsGrant().then(
                 function(data: any) {
