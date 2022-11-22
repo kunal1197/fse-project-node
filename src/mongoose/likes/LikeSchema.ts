@@ -8,7 +8,7 @@ import LikeI from "../../models/likes/likesI";
  */
 const LikeSchema = new mongoose.Schema<LikeI>(
   {
-    tuit: { type: Schema.Types.ObjectId, ref: "TuitModel" },
+    song: { type: String, required: true },
     likedBy: { type: Schema.Types.ObjectId, ref: "UserModel" },
   },
   { collection: "likes" }
