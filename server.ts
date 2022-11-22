@@ -1,17 +1,17 @@
 /**
  * @file Implements an Express Node HTTP server.
  */
-import express, {Request, Response} from 'express';
+import express from 'express';
+import SpotifyController from "./src/controllers/SpotifyController";
+
 const cors = require('cors')
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({extended: false}))
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) =>
-    res.send('Welcome to Foundation of Software Engineering!!!!'));
+SpotifyController.getInstance(app);
 
-app.get('/hello', (req: Request, res: Response) =>
-    res.send('Welcome to Foundation of Software Engineering!'));
 
 /**
  * Start a server listening at port 4000 locally
