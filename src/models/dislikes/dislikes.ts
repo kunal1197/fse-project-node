@@ -1,4 +1,4 @@
-import User from "../users/User";
+import User from "../user/User";
 import DisLikeI from "./dislikesI";
 
 export default class DisLike implements DisLikeI {
