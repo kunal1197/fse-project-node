@@ -1,3 +1,6 @@
+/**
+ * @file Declares Spotify music discovery service.
+ */
 import MusicDiscoveryServiceI from "../interfaces/MusicDiscoveryServiceI";
 import SpotifyWebApi from "spotify-web-api-node";
 import Track from "../models/Track";
@@ -31,6 +34,10 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
         return SpotifyService.spotifyService;
     }
 
+    /**
+     * Uses Spotify to fetch tracks that match a search query.
+     * @param query A string that contains the search query. Can be the title or the artist name.
+     */
     searchTracks = async (query: string) => {
         // @ts-ignore
         const tracks = await SpotifyService.spotifyApi.searchTracks(query);
