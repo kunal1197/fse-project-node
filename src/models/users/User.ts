@@ -9,8 +9,6 @@ export default class User implements UserI {
     email: string = '';
     profilePhoto: string | null = null;
     headerImage: string | null = null;
-    joined: Date = new Date();
-    location: Location | null = null;
     likedSongs: string[] = [];
     commentedSongs: string[] = [];
     playlists: string[] = [];

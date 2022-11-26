@@ -1,5 +1,5 @@
 import User from "../users/User";
-import LikeI from "./likesI";
+import LikeI from "./LikesI";
 
 export default class Like implements LikeI {
   private id: string = "";
