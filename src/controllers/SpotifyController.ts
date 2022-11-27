@@ -53,7 +53,9 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
             return
         }
         const searchQuery = req.query.q.toString();
-        SpotifyController.spotifyService.searchTracks(searchQuery).then(tracks => res.json(tracks))
+        SpotifyController.spotifyService.searchTracks(searchQuery)
+            .then(tracks => res.json(tracks))
+            .catch(err => res.json(err))
     }
 
 

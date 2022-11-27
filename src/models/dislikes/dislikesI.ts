@@ -11,7 +11,7 @@ import User from "../users/User";
  * @property {User} dislikedBy User disliking the tuit
  */
 
-export default interface LikeI {
+export default interface DislikesI {
   song: string;
   dislikedBy: User;
 }

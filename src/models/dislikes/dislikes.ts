@@ -1,7 +1,7 @@
 import User from "../users/User";
-import DisLikeI from "./dislikesI";
+import DisLikesI from "./dislikesI";
 
-export default class DisLike implements DisLikeI {
+export default class DisLike implements DisLikesI {
   private id: string = "";
   dislikedBy: User;
   song: string;
