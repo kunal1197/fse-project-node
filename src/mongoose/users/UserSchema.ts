@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import User from "../../models/users/User";
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema<User>({
     username: {
         type: String,
         required: true
@@ -11,16 +12,6 @@ const UserSchema = new mongoose.Schema({
     },
     firstName: String,
     lastName: String,
-    location: {
-        latitude: {
-            type: Number,
-            default: 0.0
-        },
-        longitude: {
-            type: Number,
-            default: 0.0
-        },
-    },
     likedSongs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song"
