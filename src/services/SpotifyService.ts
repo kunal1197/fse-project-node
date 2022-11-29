@@ -4,6 +4,8 @@
 import MusicDiscoveryServiceI from "../interfaces/MusicDiscoveryServiceI";
 import SpotifyWebApi from "spotify-web-api-node";
 import Track from "../models/Track";
+
+// TODO: Remove this from here.
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -11,6 +13,7 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
 
     private static spotifyService: SpotifyService | null = null;
     private static spotifyApi: SpotifyWebApi | null = null;
+    private static toggle: boolean = true;
 
     public static getInstance = (): SpotifyService => {
         if (SpotifyService.spotifyService === null) {
@@ -20,16 +23,7 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
                 clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
                 redirectUri: process.env.SPOTIFY_REDIRECT_URI
             })
-            SpotifyService.spotifyApi.clientCredentialsGrant().then(
-                function(data: any) {
-                    console.log('The access token is ' + data.body['access_token']);
-                    // @ts-ignore
-                    SpotifyService.spotifyApi.setAccessToken(data.body['access_token']);
-                },
-                function(err: any) {
-                    console.log('Something went wrong!', err);
-                }
-            );
+            SpotifyService.spotifyService?.setAccessToken();
         }
         return SpotifyService.spotifyService;
     }
@@ -39,17 +33,47 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
      * @param query A string that contains the search query. Can be the title or the artist name.
      */
     searchTracks = async (query: string) => {
-        // @ts-ignore
-        const tracks = await SpotifyService.spotifyApi.searchTracks(query);
-        const trackList:Track[] = []
-        if (tracks === null || tracks.body === null || tracks.body.tracks === null)
-            return []
+        try {
+            const tracks = await SpotifyService.spotifyApi?.searchTracks(query);
+            const trackList:Track[] = []
+            // @ts-ignore
+            if (tracks === null || tracks.body === null || tracks.body.tracks === null)
+                return []
 
-        // @ts-ignore
-        for (const item of tracks.body.tracks.items) {
-            trackList.push({id: item.id, title: item.name, image: item.album.images[item.album.images.length - 1].url, releaseYear: item.album.release_date})
+            // @ts-ignore
+            for (const item of tracks.body.tracks.items) {
+                trackList.push({id: item.id, title: item.name, image: item.album.images[item.album.images.length - 1].url, releaseYear: item.album.release_date})
+            }
+            return trackList;
+        } catch (e) {
+            SpotifyService.spotifyService?.handleError(e);
+            throw e;
         }
-        return trackList;
+    }
+
+    handleError = (error: any) => {
+        if (error === null) {
+            return;
+        }
+        console.debug(error);
+        if (error.statusCode === 401) {
+            SpotifyService.spotifyService?.setAccessToken();
+        }
+    }
+
+    setAccessToken = async () => {
+        if (SpotifyService.toggle) {
+            SpotifyService.spotifyApi?.setAccessToken("bad token");
+            SpotifyService.toggle = !SpotifyService.toggle;
+        } else {
+            // @ts-ignore
+            const response = await SpotifyService.spotifyApi.clientCredentialsGrant();
+            if (response.statusCode === 200) {
+                SpotifyService.spotifyApi?.setAccessToken(response.body['access_token']);
+            } else {
+                console.log("Error setting access token.", response.body);
+            }
+        }
     }
 
 }
