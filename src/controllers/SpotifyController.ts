@@ -55,7 +55,10 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
         const searchQuery = req.query.q.toString();
         SpotifyController.spotifyService.searchTracks(searchQuery)
             .then(tracks => res.json(tracks))
-            .catch(err => res.json(err))
+            .catch(err => {
+                console.log("Before error is returned for 401 from Node")
+                res.json(err)
+            })
     }
 
 
