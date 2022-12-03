@@ -3,7 +3,7 @@
  */
 import MusicDiscoveryServiceI from "../interfaces/MusicDiscoveryServiceI";
 import SpotifyWebApi from "spotify-web-api-node";
-import Track from "../models/Track";
+import Track from "../models/tracks/Track";
 
 // TODO: Remove this from here.
 const dotenv = require('dotenv');
@@ -33,15 +33,31 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
      */
     searchTracks = async (query: string) => {
         try {
-            const tracks = await SpotifyService.spotifyApi?.searchTracks(query);
-            const trackList:Track[] = []
+            const response = await SpotifyService.spotifyApi?.searchTracks(query);
+            const trackList: Track[] = []
             // @ts-ignore
-            if (tracks === null || tracks.body === null || tracks.body.tracks === null)
+            if (response === null || response.body === null || response.body.tracks === null)
                 return []
 
+
             // @ts-ignore
-            for (const item of tracks.body.tracks.items) {
-                trackList.push({id: item.id, title: item.name, image: item.album.images[item.album.images.length - 1].url, releaseYear: item.album.release_date})
+            for (const item of response.body.tracks.items) {
+                let artistList = [];
+                for (const artistObject of item.artists) {
+                    artistList.push(artistObject.name);
+                }
+                let imageList = []
+                for (const imageObject of item.album.images) {
+                    imageList.push(imageObject.url)
+                }
+                let albumName = "";
+                if (item.album && item.album.name) {
+                    albumName = item.album.name;
+                }
+                const track = new Track(item.id, artistList, imageList,
+                    item.album.release_date, item.duration_ms,
+                    item.external_urls.spotify, item.name, albumName)
+                trackList.push(track);
             }
             return trackList;
         } catch (e) {
