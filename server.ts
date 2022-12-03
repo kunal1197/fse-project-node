@@ -23,6 +23,14 @@ const options = {
   family: 4,
 };
 
+// const CONNECTION_STRING =
+//   process.env.DB_CONNECTION_STRING ||
+//   "mongodb+srv://kunal:fse123456@cluster0.wuwbxi4.mongodb.net/tuiter-fse-project?retryWrites=true&w=majority" ||
+//   "mongodb://localhost:27017/tuiter-fse-project";
+// mongoose.connect(CONNECTION_STRING).then(() => {
+//   console.log("Connected to MongoDB", CONNECTION_STRING);
+// });
+
 const DB_NAME = process.env.DB_NAME;
 let connectionString;
 if (process.env.ENVIRONMENT === "local") {
