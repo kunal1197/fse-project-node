@@ -16,5 +16,6 @@ export default interface TrackI {
     releaseYear: string,
     artists: string[]
     songLink: string,
-    songDurationInMs: number
+    songDurationInMs: number,
+    album: string
 }

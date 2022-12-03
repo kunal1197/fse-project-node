@@ -34,7 +34,7 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
     searchTracks = async (query: string) => {
         try {
             const response = await SpotifyService.spotifyApi?.searchTracks(query);
-            const trackList:Track[] = []
+            const trackList: Track[] = []
             // @ts-ignore
             if (response === null || response.body === null || response.body.tracks === null)
                 return []
@@ -50,7 +50,13 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
                 for (const imageObject of item.album.images) {
                     imageList.push(imageObject.url)
                 }
-                const track = new Track(item.id,artistList,imageList,item.album.release_date,item.duration_ms,item.external_urls.spotify,item.name)
+                let albumName = "";
+                if (item.album && item.album.name) {
+                    albumName = item.album.name;
+                }
+                const track = new Track(item.id, artistList, imageList,
+                    item.album.release_date, item.duration_ms,
+                    item.external_urls.spotify, item.name, albumName)
                 trackList.push(track);
             }
             return trackList;

@@ -8,7 +8,10 @@ export default class Track implements TrackI {
     songDurationInMs: number;
     songLink: string;
     title: string;
-    constructor(id: string, artists: string[], images:string[], releaseYear: string, songDurationInMs: number, songLink: string, title: string) {
+    album: string
+    constructor(id: string, artists: string[], images:string[], releaseYear: string,
+                songDurationInMs: number, songLink: string,
+                title: string, album:string) {
         this.id = id;
         this.artists = artists;
         this.images = images;
@@ -16,6 +19,7 @@ export default class Track implements TrackI {
         this.songDurationInMs = songDurationInMs;
         this.songLink = songLink;
         this.title = title;
+        this.album = album
     }
 
 
