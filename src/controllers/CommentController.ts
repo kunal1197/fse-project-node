@@ -105,7 +105,6 @@ export class CommentController implements CommentControllerI {
       res.status(404).json({ error: "Error" });
     }
   };
-  
 
   /**
    * Deletes a comment instance from the database.
@@ -124,5 +123,8 @@ export class CommentController implements CommentControllerI {
         req.params.sid
       );
       res.status(200).json(comment);
+    } catch (err) {
+      res.status(404).json({ error: "Error" });
     }
+  };
 }
