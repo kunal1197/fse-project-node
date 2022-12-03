@@ -13,7 +13,6 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
 
     private static spotifyService: SpotifyService | null = null;
     private static spotifyApi: SpotifyWebApi | null = null;
-    private static toggle: boolean = true;
 
     public static getInstance = (): SpotifyService => {
         if (SpotifyService.spotifyService === null) {
@@ -23,7 +22,8 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
                 clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
                 redirectUri: process.env.SPOTIFY_REDIRECT_URI
             })
-            SpotifyService.spotifyService?.setAccessToken();
+            // SpotifyService.spotifyService?.setAccessToken();
+            SpotifyService.spotifyApi?.setAccessToken("badddd");
         }
         return SpotifyService.spotifyService;
     }
@@ -46,33 +46,36 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
             }
             return trackList;
         } catch (e) {
-            SpotifyService.spotifyService?.handleError(e);
+            console.log('Before handleError call');
+            await SpotifyService.spotifyService?.handleError(e);
+            console.log('After handleError call');
             throw e;
         }
     }
 
-    handleError = (error: any) => {
+    handleError = async (error: any) => {
         if (error === null) {
             return;
         }
         console.debug(error);
         if (error.statusCode === 401) {
-            SpotifyService.spotifyService?.setAccessToken();
+            console.log('Before setAccessToken is called of service');
+            await SpotifyService.spotifyService?.setAccessToken();
+            console.log('After setAccessToken is called of service');
         }
     }
 
     setAccessToken = async () => {
-        if (SpotifyService.toggle) {
-            SpotifyService.spotifyApi?.setAccessToken("bad token");
-            SpotifyService.toggle = !SpotifyService.toggle;
+        console.log('Before clientCredentialsGrant is called of spotify');
+        // @ts-ignore
+        const response = await SpotifyService.spotifyApi.clientCredentialsGrant();
+        console.log('After clientCredentialsGrant is called of spotify');
+        if (response.statusCode === 200) {
+            console.log('Before setAccessToken is called of spotifyApi');
+            SpotifyService.spotifyApi?.setAccessToken(response.body['access_token']);
+            console.log('After setAccessToken is called of spotifyApi');
         } else {
-            // @ts-ignore
-            const response = await SpotifyService.spotifyApi.clientCredentialsGrant();
-            if (response.statusCode === 200) {
-                SpotifyService.spotifyApi?.setAccessToken(response.body['access_token']);
-            } else {
-                console.log("Error setting access token.", response.body);
-            }
+            console.log("Error setting access token.", response.body);
         }
     }
 
