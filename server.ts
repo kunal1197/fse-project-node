@@ -37,7 +37,6 @@ if (process.env.ENVIRONMENT === 'local') {
     connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
 }
 // connect to the database
-console.log(connectionString)
 mongoose.connect(connectionString, options);
 
 
