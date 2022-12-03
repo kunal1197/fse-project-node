@@ -22,8 +22,7 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
                 clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
                 redirectUri: process.env.SPOTIFY_REDIRECT_URI
             })
-            // SpotifyService.spotifyService?.setAccessToken();
-            SpotifyService.spotifyApi?.setAccessToken("badddd");
+            SpotifyService.spotifyService?.setAccessToken();
         }
         return SpotifyService.spotifyService;
     }
