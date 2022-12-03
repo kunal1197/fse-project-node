@@ -12,9 +12,9 @@ import mongoose from "mongoose";
  * @property {Date} postedOn Date on which user posted comment
  */
 export default interface Comment {
-    _id?: mongoose.Schema.Types.ObjectId,
-    songID: mongoose.Schema.Types.ObjectId,
-    comment: string,
-    postedBy: User,
-    postedOn?: Date
-};
+  _id?: mongoose.Schema.Types.ObjectId;
+  songID: mongoose.Schema.Types.ObjectId;
+  comment: string;
+  postedBy: User;
+  postedOn?: Date;
+}
