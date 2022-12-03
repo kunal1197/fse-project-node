@@ -1,6 +1,5 @@
 import Comment from "../models/comments/Comment";
 
-// Path: src/interfaces/CommentDaoI.ts
 export default interface CommentDaoI {
   getComments: (tid: string) => Promise<Comment[]>;
   addComment: (uid: string, tid: string, comment: string) => Promise<any>;
