@@ -26,21 +26,21 @@ export default class CommentDao implements CommentDaoI {
 
   /**
    * Retrieves all comments for a song.
-   * @param {string} songID song for which comments are to be retrieved.
+   * @param {string} sid song for which comments are to be retrieved.
    * @returns Promise To be notified when the comments are retrieved from the database.
    * @throws {Error} If the song does not exist.
    */
   public getComments = async (sid: string): Promise<Comment[]> => {
-    const comments = await CommentModel.find({ songID: sid }).exec();
+    const comments = await CommentModel.find({ songID: sid }).populate("postedBy").exec();
     if (comments === null) {
-      throw new Error("Comments does not exist");
+      throw new Error("Comments do not exist");
     }
     return comments;
   };
 
   /**
    * Inserts a comment instance into the database.
-   * @param {string} postedBy User who wishes to comment on a song.
+   * @param {string} uid User who wishes to comment on a song.
    * @param {string} sid song that is commented on.
    * @param {string} comment Comment that is added.
    * @returns Promise To be notified when a comment instance in inserted into the database.

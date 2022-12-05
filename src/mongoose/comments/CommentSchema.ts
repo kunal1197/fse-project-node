@@ -8,7 +8,7 @@ import Comment from "../../models/comments/Comment";
 const CommentSchema = new mongoose.Schema<Comment>(
   {
     songID: {
-      type: Schema.Types.ObjectId,
+      type: String,
     },
     comment: {
       type: String,

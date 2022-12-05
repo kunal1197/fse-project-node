@@ -13,7 +13,7 @@ import mongoose from "mongoose";
  */
 export default interface Comment {
   _id?: mongoose.Schema.Types.ObjectId;
-  songID: mongoose.Schema.Types.ObjectId;
+  songID: string;
   comment: string;
   postedBy: User;
   postedOn?: Date;
