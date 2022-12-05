@@ -25,23 +25,23 @@ export default class CommentDao implements CommentDaoI {
   private constructor() {}
 
   /**
-   * Retrieves all comments for a tuit.
-   * @param {string} sid Tuit for which comments are to be retrieved.
+   * Retrieves all comments for a song.
+   * @param {string} songID song for which comments are to be retrieved.
    * @returns Promise To be notified when the comments are retrieved from the database.
    * @throws {Error} If the song does not exist.
    */
-  getComments = async (sid: string): Promise<Comment[]> => {
-    const comment = await CommentModel.find({ comment: sid }).exec();
-    if (comment === null) {
-      throw new Error("Tuit does not exist");
+  public getComments = async (sid: string): Promise<Comment[]> => {
+    const comments = await CommentModel.find({ songID: sid }).exec();
+    if (comments === null) {
+      throw new Error("Comments does not exist");
     }
-    return comment;
+    return comments;
   };
 
   /**
    * Inserts a comment instance into the database.
-   * @param {string} uid User who wishes to comment on a tuit.
-   * @param {string} sid Tuit that is commented on.
+   * @param {string} postedBy User who wishes to comment on a song.
+   * @param {string} sid song that is commented on.
    * @param {string} comment Comment that is added.
    * @returns Promise To be notified when a comment instance in inserted into the database.
    * @throws {Error} If the comment does not exist.
@@ -54,8 +54,8 @@ export default class CommentDao implements CommentDaoI {
   ): Promise<any> => {
     const com = await CommentModel.create({
       comment: comment,
-      commentedBy: uid,
-      song: sid,
+      postedBy: uid,
+      songID: sid,
     });
     if (com === null) {
       throw new Error("Comment does not exist");
@@ -66,7 +66,7 @@ export default class CommentDao implements CommentDaoI {
   /**
    * Updates a comment instance in the database.
    * @param {string} uid User who wishes to update a comment.
-   * @param {string} tid Tuit that is commented on.
+   * @param {string} sid Song that is commented on.
    * @param {string} comment Comment that is updated.
    * @returns Promise To be notified when a comment instance in updated in the database.
    * @throws {Error} If the comment does not exist.
@@ -74,13 +74,13 @@ export default class CommentDao implements CommentDaoI {
    */
   updateComment = async (
     uid: string,
-    tid: string,
+    sid: string,
     comment: string
   ): Promise<any> => {
     const com = await CommentModel.updateOne({
       comment: comment,
-      commentedBy: uid,
-      tuit: tid,
+      postedBy: uid,
+      songID: sid,
     });
     if (com === null) {
       throw new Error("Comment does not exist");
@@ -91,15 +91,15 @@ export default class CommentDao implements CommentDaoI {
   /**
    * Removes a comment instance from the database.
    * @param {string} uid User who wishes to delete a comment.
-   * @param {string} sid Tuit that is commented on.
+   * @param {string} sid Song that is commented on.
    * @param {string} comment Comment that is deleted.
    * @returns Promise To be notified when a comment instance in removed from the database.
    * @throws {Error} If the comment does not exist.
    */
   deleteComment = async (uid: string, sid: string): Promise<any> => {
     const com = await CommentModel.deleteOne({
-      commentedBy: uid,
-      song: sid,
+      postedBy: uid,
+      songID: sid,
     });
     if (com === null) {
       throw new Error("Comment does not exist");
