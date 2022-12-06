@@ -7,12 +7,13 @@ import LikeController from "./src/controllers/LikeController";
 import mongoose from "mongoose";
 import UserController from "./src/controllers/UserController";
 import { CommentController } from "./src/controllers/CommentController";
+import AuthenticationController from "./src/controllers/AuthenticationController";
 
 require("dotenv").config({ debug: true });
 
 const cors = require("cors");
+const session = require("express-session");
 const app = express();
-
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -30,7 +31,11 @@ const options = {
 // mongoose.connect(CONNECTION_STRING).then(() => {
 //   console.log("Connected to MongoDB", CONNECTION_STRING);
 // });
-
+let sess = {
+  secret: "Secret",
+  cookie: {
+    secure: false
+  }}
 const DB_NAME = process.env.DB_NAME;
 let connectionString;
 if (process.env.ENVIRONMENT === "local") {
@@ -48,14 +53,15 @@ if (process.env.ENVIRONMENT === "local") {
 // connect to the database
 mongoose.connect(connectionString, options);
 
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+app.use(session(sess));
 SpotifyController.getInstance(app);
 LikeController.getInstance(app);
 UserController.getInstance(app);
 CommentController.getInstance(app);
+AuthenticationController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
