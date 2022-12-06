@@ -35,6 +35,7 @@ export default class AuthenticationController implements AuthenticationControlle
         newUser.password = await bcrypt.hash(password, saltRounds);
         const existingUser = await AuthenticationController.userDao.findUserByUsername(req.body.username);
         if (existingUser) {
+            console.log("Is existing user")
             res.sendStatus(403);
             return;
         }
@@ -52,6 +53,7 @@ export default class AuthenticationController implements AuthenticationControlle
             profile.password = "";
             res.json(profile);
         } else {
+            console.log("Inside the else block for profile in controller.")
             res.sendStatus(403);
         }
     }
