@@ -7,6 +7,7 @@ import LikeController from "./src/controllers/LikeController";
 import mongoose from "mongoose";
 import UserController from "./src/controllers/UserController";
 import { CommentController } from "./src/controllers/CommentController";
+import AuthenticationController from "./src/controllers/AuthenticationController";
 
 require("dotenv").config({ debug: true });
 
@@ -56,6 +57,7 @@ SpotifyController.getInstance(app);
 LikeController.getInstance(app);
 UserController.getInstance(app);
 CommentController.getInstance(app);
+AuthenticationController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
