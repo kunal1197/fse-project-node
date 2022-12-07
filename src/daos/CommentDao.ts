@@ -92,7 +92,6 @@ export default class CommentDao implements CommentDaoI {
    * Removes a comment instance from the database.
    * @param {string} uid User who wishes to delete a comment.
    * @param {string} sid Song that is commented on.
-   * @param {string} comment Comment that is deleted.
    * @returns Promise To be notified when a comment instance in removed from the database.
    * @throws {Error} If the comment does not exist.
    */
