@@ -26,11 +26,11 @@ export class CommentController implements CommentControllerI {
         CommentController.commentController.addComment
       );
       app.put(
-        "/api/comments/:uid/song/:sid",
+        "/api/comments/:uid/comment/:cid",
         CommentController.commentController.updateComment
       );
       app.delete(
-        "/api/comments/:uid/song/:sid",
+        "/api/comments/:uid/comment/:cid",
         CommentController.commentController.deleteComment
       );
     }
@@ -56,7 +56,7 @@ export class CommentController implements CommentControllerI {
       );
       res.status(200).json(comments);
     } catch (err) {
-      res.status(404).json({ error: "Error" });
+      res.status(404).json({ error: err });
     }
   };
 
@@ -87,7 +87,7 @@ export class CommentController implements CommentControllerI {
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(403).json({ error: "Error" });
+      res.status(403).json({ error: err });
     }
   };
 
@@ -103,7 +103,7 @@ export class CommentController implements CommentControllerI {
     res: any
   ): Promise<void> => {
     const uid = req.params.uid;
-    const sid = req.params.sid;
+    const cid = req.params.cid;
     let profile = null;
     if (req.session) {
       profile = req.session["profile"];
@@ -113,12 +113,12 @@ export class CommentController implements CommentControllerI {
     try {
       const comment = await CommentController.commentDao.updateComment(
         userId,
-        sid,
+        cid,
         req.body.comment
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(403).json({ error: "Error" });
+      res.status(403).json({ error: err });
     }
   };
 
@@ -134,7 +134,7 @@ export class CommentController implements CommentControllerI {
     res: any
   ): Promise<void> => {
     const uid = req.params.uid;
-    const sid = req.params.sid;
+    const cid = req.params.cid;
     let profile = null;
     if (req.session) {
       profile = req.session["profile"];
@@ -144,11 +144,11 @@ export class CommentController implements CommentControllerI {
     try {
       const comment = await CommentController.commentDao.deleteComment(
         userId,
-        sid
+        cid
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(403).json({ error: "Error" });
+      res.status(403).json({ error: err });
     }
   };
 }
