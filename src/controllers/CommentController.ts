@@ -67,19 +67,27 @@ export class CommentController implements CommentControllerI {
    * @returns {void}
    * @throws {Error} If the comment does not exist.
    */
-  addComment: (req: Request, res: Response) => void = async (
-    req: Request,
-    res: Response
+  //  Add session variables to get uid
+  addComment: (req: any, res: any) => void = async (
+    req: any,
+    res: any
   ): Promise<void> => {
+    const uid = req.params.uid;
+    const sid = req.params.sid;
+    let profile = null;
+    if (req.session) {
+      profile = req.session["profile"];
+    }
+    const userId = uid === "me" && profile ? profile._id : uid;
     try {
       const comment = await CommentController.commentDao.addComment(
-        req.params.uid,
-        req.params.sid,
+        userId,
+        sid,
         req.body.comment
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(404).json({ error: "Error" });
+      res.status(403).json({ error: "Error" });
     }
   };
 
@@ -90,19 +98,27 @@ export class CommentController implements CommentControllerI {
    * @returns {void}
    * @throws {Error} If the comment does not exist.
    */
-  updateComment: (req: Request, res: Response) => void = async (
-    req: Request,
-    res: Response
+  updateComment: (req: any, res: any) => void = async (
+    req: any,
+    res: any
   ): Promise<void> => {
+    const uid = req.params.uid;
+    const sid = req.params.sid;
+    let profile = null;
+    if (req.session) {
+      profile = req.session["profile"];
+    }
+    const userId = uid === "me" && profile ? profile._id : uid;
+
     try {
       const comment = await CommentController.commentDao.updateComment(
-        req.params.uid,
-        req.params.sid,
+        userId,
+        sid,
         req.body.comment
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(404).json({ error: "Error" });
+      res.status(403).json({ error: "Error" });
     }
   };
 
@@ -113,18 +129,26 @@ export class CommentController implements CommentControllerI {
    * @returns {void}
    * @throws {Error} If the comment does not exist.
    */
-  deleteComment: (req: Request, res: Response) => void = async (
-    req: Request,
-    res: Response
+  deleteComment: (req: any, res: any) => void = async (
+    req: any,
+    res: any
   ): Promise<void> => {
+    const uid = req.params.uid;
+    const sid = req.params.sid;
+    let profile = null;
+    if (req.session) {
+      profile = req.session["profile"];
+    }
+    const userId = uid === "me" && profile ? profile._id : uid;
+
     try {
       const comment = await CommentController.commentDao.deleteComment(
-        req.params.uid,
-        req.params.sid
+        userId,
+        sid
       );
       res.status(200).json(comment);
     } catch (err) {
-      res.status(404).json({ error: "Error" });
+      res.status(403).json({ error: "Error" });
     }
   };
 }
