@@ -36,6 +36,8 @@ export default class LikeController implements LikeControllerI {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllSongsLikedByUser);
             app.get("/api/songs/:sid/likes", LikeController.likeController.findAllUsersThatLikedSong);
+            app.get("/api/users/:uid/likes/:sid", LikeController.likeController.findUserLikesSong);
+            app.get("/api/songs/:sid/likesCount", LikeController.likeController.countHowManyLikes);
             app.post("/api/users/:uid/likes/:sid", LikeController.likeController.userLikesSong);
             app.put("/api/users/:uid/likes/:sid", LikeController.likeController.userTogglesSongLikes);
             app.delete("/api/users/:uid/unlikes/:sid", LikeController.likeController.userUnlikesSong);
@@ -64,7 +66,6 @@ export default class LikeController implements LikeControllerI {
      * body formatted as JSON arrays containing the tuit objects that were liked
      */
     findAllSongsLikedByUser = (req: any, res: any) => {
-
         const uid = req.params.uid;
         let profile;
         if (req.session) {
@@ -90,6 +91,37 @@ export default class LikeController implements LikeControllerI {
             });
     }
 
+    /**
+     * Retrieves users that liked a song from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter sid and uid representing the liked song and user
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the user objects
+     */
+    findUserLikesSong = (req: any, res: any) => {
+        const uid = req.params.uid;
+        let profile;
+        if (req.session) {
+            profile = req.session['profile'];
+        } else {
+            profile = null;
+        }
+        const userId = uid === "me" && profile ? profile._id : uid;
+
+        LikeController.likeDao.findUserLikesSong(userId, req.params.sid)
+            .then(likes => res.json(likes));
+    }
+
+    /**
+     * Retrieves number of users that liked a song from the database
+     * @param {Request} req Represents request from client, including the path
+     * parameter sid representing the liked song
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON arrays containing the user objects
+     */
+    countHowManyLikes = (req: any, res: any) =>
+        LikeController.likeDao.countHowManyLikes(req.params.sid)
+            .then(likes => res.json(likes));
 
     /**
      * @param {Request} req Represents request from client, including the
@@ -114,9 +146,16 @@ export default class LikeController implements LikeControllerI {
         LikeController.likeDao.userUnlikesSong(req.params.uid, req.params.sid)
             .then(status => res.send(status));
 
+    /**
+     * @param {Request} req Represents request from client, including the
+     * path parameters uid and sid representing the user that is liking or unliking a song
+     * @param {Response} res Represents response to client, including status
+     * on whether the song was liked or unliked
+     */
     userTogglesSongLikes = async (req: any, res: any) => {
         const uid = req.params.uid;
         const sid = req.params.sid;
+        let songLiked = false;
         let profile = null;
         if (req.session) {
             profile = req.session['profile'];
@@ -128,10 +167,13 @@ export default class LikeController implements LikeControllerI {
                 .findUserLikesSong(userId, sid);
             if (userAlreadyLikedTuit) {
                 await LikeController.likeDao.userUnlikesSong(userId, sid);
+                songLiked = false
             } else {
                 await LikeController.likeDao.userLikesSong(userId, sid);
+                songLiked = true
             }
-            res.sendStatus(200);
+            const howManyLikedSong = await LikeController.likeDao.countHowManyLikes(sid)
+            res.status(200).json({count: howManyLikedSong, userLiked: songLiked});
         } catch (e) {
             res.sendStatus(404);
         }

@@ -64,9 +64,20 @@ export default class LikeDao implements LikeDaoI {
     userUnlikesSong = async (uid: string, sid: string): Promise<any> =>
         LikeModel.deleteOne({song: sid, likedBy: uid});
 
-    countHowManyLikedSong = async (sid: any) =>
+    /**
+     * Counts how many likes are there for a song from the database.
+     * @param {string} sid Song whose likes are to be counted.
+     * @returns Promise To be notified when the count is returned.
+     */
+    countHowManyLikes = async (sid: any) =>
         LikeModel.count({song: sid});
 
+    /**
+     * Finds if user has liked a song from the database.
+     * @param {string} uid User
+     * @param {string} sid Song .
+     * @returns Promise To be notified if user has liked a song.
+     */
     findUserLikesSong = async (uid: string, sid: string) =>
         LikeModel.findOne(
             {song: sid, likedBy: uid});
