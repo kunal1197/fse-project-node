@@ -80,13 +80,14 @@ export default class CommentDao implements CommentDaoI {
     comment: string
   ): Promise<any> => {
     const com = await CommentModel.updateOne(
-      { postedBy: uid, cid: cid },
+      { postedBy: uid, _id: cid },
       { $set: { comment: comment } }
     );
     if (com === null) {
       throw new Error("Comment does not exist");
     }
-    return cid;
+    console.log(comment, com)
+    return com;
   };
 
   /**
@@ -99,7 +100,7 @@ export default class CommentDao implements CommentDaoI {
   deleteComment = async (uid: string, cid: string): Promise<any> => {
     const com = await CommentModel.deleteOne({
       postedBy: uid,
-      cid: cid,
+      _id: cid,
     });
     if (com === null) {
       throw new Error("Comment does not exist");
