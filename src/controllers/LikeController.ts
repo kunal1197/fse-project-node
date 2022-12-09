@@ -87,6 +87,7 @@ export default class LikeController implements LikeControllerI {
                     likes.filter(like => like.song);
                 const songsFromLikes =
                     likesNonNullSongs.map(like => like.song);
+                console.log("The songsFromLikes are :", songsFromLikes);
                 res.json(songsFromLikes);
             });
     }

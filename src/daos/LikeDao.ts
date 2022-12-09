@@ -41,8 +41,12 @@ export default class LikeDao implements LikeDaoI {
      * @param {string} uid User for whom their liked tuits are to be retrieved.
      * @returns Promise To be notified when the liked tuits are retrieved from the database.
      */
-    findAllSongsLikedByUser = async (uid: string): Promise<Like[]> =>
-        LikeModel.find({likedBy: uid}).exec();
+    findAllSongsLikedByUser = async (uid: string): Promise<Like[]> => {
+        const likedSongs = LikeModel.find({likedBy: uid}).exec();
+        console.log("The liked songs => " + likedSongs);
+        return likedSongs;
+    }
+
 
 
 
