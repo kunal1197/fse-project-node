@@ -31,7 +31,9 @@ export default class CommentDao implements CommentDaoI {
    * @throws {Error} If the song does not exist.
    */
   public getComments = async (sid: string): Promise<Comment[]> => {
-    const comments = await CommentModel.find({ songID: sid }).populate("postedBy").exec();
+    const comments = await CommentModel.find({ songID: sid })
+      .populate("postedBy")
+      .exec();
     if (comments === null) {
       throw new Error("Comments do not exist");
     }
@@ -66,7 +68,7 @@ export default class CommentDao implements CommentDaoI {
   /**
    * Updates a comment instance in the database.
    * @param {string} uid User who wishes to update a comment.
-   * @param {string} sid Song that is commented on.
+   * @param {string} cid comment that is commented on.
    * @param {string} comment Comment that is updated.
    * @returns Promise To be notified when a comment instance in updated in the database.
    * @throws {Error} If the comment does not exist.
@@ -74,32 +76,31 @@ export default class CommentDao implements CommentDaoI {
    */
   updateComment = async (
     uid: string,
-    sid: string,
+    cid: string,
     comment: string
   ): Promise<any> => {
-    const com = await CommentModel.updateOne({
-      comment: comment,
-      postedBy: uid,
-      songID: sid,
-    });
+    const com = await CommentModel.updateOne(
+      { postedBy: uid, _id: cid },
+      { $set: { comment: comment } }
+    );
     if (com === null) {
       throw new Error("Comment does not exist");
     }
+    console.log(comment, com)
     return com;
   };
 
   /**
    * Removes a comment instance from the database.
    * @param {string} uid User who wishes to delete a comment.
-   * @param {string} sid Song that is commented on.
-   * @param {string} comment Comment that is deleted.
+   * @param {string} cid Comment that is commented on.
    * @returns Promise To be notified when a comment instance in removed from the database.
    * @throws {Error} If the comment does not exist.
    */
-  deleteComment = async (uid: string, sid: string): Promise<any> => {
+  deleteComment = async (uid: string, cid: string): Promise<any> => {
     const com = await CommentModel.deleteOne({
       postedBy: uid,
-      songID: sid,
+      _id: cid,
     });
     if (com === null) {
       throw new Error("Comment does not exist");
