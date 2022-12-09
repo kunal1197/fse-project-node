@@ -61,6 +61,10 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
             })
     }
 
+    getSongTitles = (req: Request, res: Response) => {
+        const songIDs =
+    }
+
 
 
 

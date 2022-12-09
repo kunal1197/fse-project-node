@@ -68,6 +68,19 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
         }
     }
 
+
+    getSongTitles = async (songIDs : string[]) => {
+        const response = await SpotifyService.spotifyApi?.getTracks(songIDs);
+        const trackList: Track[] = []
+
+        // @ts-ignore
+        if (response === null || response.body === null || response.body.tracks === null)
+            return []
+        console.log("The response for song titles is :",response);
+
+
+    }
+
     handleError = async (error: any) => {
         if (error === null) {
             return;
