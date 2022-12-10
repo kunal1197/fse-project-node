@@ -32,6 +32,7 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
         if(SpotifyController.spotifyController === null) {
             SpotifyController.spotifyController = new SpotifyController();
             app.get("/api/music/search/", SpotifyController.spotifyController.searchTracks);
+            app.post("/api/music/title/", SpotifyController.spotifyController.getSongTitles);
         }
         return SpotifyController.spotifyController;
     }
@@ -61,8 +62,18 @@ export default class SpotifyController implements MusicDiscoveryControllerI {
             })
     }
 
-    getSongTitles = (req: Request, res: Response) => {
-        const songIDs =
+    getSongTitles = async (req: Request, res: Response) => {
+        console.log(req.body)
+        const songIDs = req.body.sid;
+        SpotifyController.spotifyService.getSongTitles(songIDs)
+            .then(tracks => res.json(tracks))
+            .catch(err => {
+                console.log("Error returned from Spotify service",err);
+                // res.json(err)
+                res.status(400).send({
+                    message: "Error returned from Spotify service: " + err.message
+                });
+            })
     }
 
 

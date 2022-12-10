@@ -72,12 +72,30 @@ export default class SpotifyService implements MusicDiscoveryServiceI {
     getSongTitles = async (songIDs : string[]) => {
         const response = await SpotifyService.spotifyApi?.getTracks(songIDs);
         const trackList: Track[] = []
-
         // @ts-ignore
-        if (response === null || response.body === null || response.body.tracks === null)
-            return []
-        console.log("The response for song titles is :",response);
-
+        console.log("The response for song titles is :",response.body.tracks);
+        // @ts-ignore
+        for (const item of response.body.tracks) {
+            let artistList = [];
+            for (const artistObject of item.artists) {
+                artistList.push(artistObject.name);
+            }
+            let imageList = []
+            for (const imageObject of item.album.images) {
+                imageList.push(imageObject.url)
+            }
+            let albumName = "";
+            if (item.album && item.album.name) {
+                albumName = item.album.name;
+            }
+            const track = new Track(item.id, artistList, imageList,
+                item.album.release_date, item.duration_ms,
+                item.external_urls.spotify, item.name, albumName)
+            trackList.push(track);
+        }
+        console.log("The tracklist is :",trackList)
+        // @ts-ignore
+        return trackList;
 
     }
 
