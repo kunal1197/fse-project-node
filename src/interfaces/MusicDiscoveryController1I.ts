@@ -3,7 +3,7 @@
  */
 import {Request, Response} from "express";
 
-export default interface MusicDiscoveryControllerI {
+export default interface MusicDiscoveryController1I {
     /**
      * Retrieves music tracks based on a query.
      * @param {Request} req Represents request from client, including the q
