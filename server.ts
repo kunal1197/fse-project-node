@@ -34,8 +34,9 @@ const options = {
 let sess = {
   secret: "Secret",
   cookie: {
-    secure: false
-  }}
+    secure: false,
+  },
+};
 const DB_NAME = process.env.DB_NAME;
 let connectionString;
 if (process.env.ENVIRONMENT === "local") {
@@ -53,7 +54,7 @@ if (process.env.ENVIRONMENT === "local") {
 // connect to the database
 mongoose.connect(connectionString, options);
 
-app.use(cors({credentials: true, origin: true}));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(session(sess));
@@ -69,3 +70,5 @@ AuthenticationController.getInstance(app);
  */
 const PORT = 4000;
 app.listen(process.env.PORT || PORT);
+
+module.exports = app;
