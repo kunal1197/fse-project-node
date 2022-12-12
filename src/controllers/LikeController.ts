@@ -83,11 +83,12 @@ export default class LikeController implements LikeControllerI {
 
         LikeController.likeDao.findAllSongsLikedByUser(userId)
             .then(likes => {
-                const likesNonNullTuits =
+                const likesNonNullSongs =
                     likes.filter(like => like.song);
-                const tuitsFromLikes =
-                    likesNonNullTuits.map(like => like.song);
-                res.json(tuitsFromLikes);
+                const songsFromLikes =
+                    likesNonNullSongs.map(like => like.song);
+                console.log("The songsFromLikes are :", songsFromLikes);
+                res.json(songsFromLikes);
             });
     }
 
@@ -163,9 +164,9 @@ export default class LikeController implements LikeControllerI {
         const userId = uid === "me" && profile ?
             profile._id : uid;
         try {
-            const userAlreadyLikedTuit = await LikeController.likeDao
+            const userAlreadyLikedSong = await LikeController.likeDao
                 .findUserLikesSong(userId, sid);
-            if (userAlreadyLikedTuit) {
+            if (userAlreadyLikedSong) {
                 await LikeController.likeDao.userUnlikesSong(userId, sid);
                 songLiked = false
             } else {
