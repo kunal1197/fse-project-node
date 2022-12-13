@@ -5,8 +5,8 @@ import CommentDao from "../daos/CommentDao";
 import { CommentControllerI } from "../interfaces/CommentControllerI";
 
 export class CommentController implements CommentControllerI {
-  private static commentDao: CommentDao = CommentDao.getInstance();
-  private static commentController: CommentController | null = null;
+  public static commentDao: CommentDao = CommentDao.getInstance();
+  public static commentController: CommentController | null = null;
 
   /**
    * Creates singleton CommentController instance
@@ -79,6 +79,7 @@ export class CommentController implements CommentControllerI {
       profile = req.session["profile"];
     }
     const userId = uid === "me" && profile ? profile._id : uid;
+
     try {
       const comment = await CommentController.commentDao.addComment(
         userId,
