@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for spotify music discovery resource
  */
-import MusicDiscoveryControllerI from "../interfaces/MusicDiscoveryControllerI";
+import MusicDiscoveryController1I from "../interfaces/MusicDiscoveryController1I";
 import {Express, Request, Response} from "express";
 import SpotifyService from "../services/SpotifyService";
 
@@ -17,7 +17,7 @@ import SpotifyService from "../services/SpotifyService";
  * @property {SpotifyController} spotifyController Singleton controller implementing
  * RESTful Web service API
  */
-export default class SpotifyController implements MusicDiscoveryControllerI {
+export default class SpotifyController implements MusicDiscoveryController1I {
 
     private static spotifyController: SpotifyController | null = null;
     private static spotifyService: SpotifyService = SpotifyService.getInstance();
